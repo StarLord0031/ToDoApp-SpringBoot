@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>To Do Application</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+            rel="stylesheet">
+
+    <style>
+        .completed {
+          text-decoration: line-through;
+          color: #6c757d;
+        }
+        .unchecked-icon {
+          color: #adb5bd;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <h1 class="text-center mb-4">TO DO Application</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title mb-3">TO-Do List</h4>
+
+            <!-- Add Task Form -->
+            <form th:action="@{/add}" method="post" class="row g-2 mb-4">
+                <div class="col-sm-9">
+                    <input type="text" name="title" class="form-control"
+                           placeholder="Add your task" required>
+                </div>
+                <div class="col-sm-3 d-grid">
+                    <button class="btn btn-primary" type="submit">
+                        Add <span class="ms-1">+</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Empty List Message -->
+            <div th:if="${#lists.isEmpty(todos)}" class="alert alert-info">
+                No Todo found
+            </div>
+
+            <!-- Todo Items -->
+            <ul class="list-group" th:if="${!#lists.isEmpty(todos)}">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:each="todo: ${todos}">
+
+                    <div>
+                        <!-- Toggle Complete -->
+                        <a th:href="@{/update/{id}(id=${todo.id})}"
+                           class="me-2 text-decoration-none">
+                            <i th:classappend="${todo.completed} ? 'bi-check-circle-fill text-success' : 'bi-circle unchecked-icon'"></i>
+                        </a>
+
+                        <!-- Task Title -->
+                        <span th:text="${todo.title}"
+                              th:classappend="${todo.completed}? 'completed' : ''">
+              </span>
+                    </div>
+
+                    <!-- Delete Button -->
+                    <a th:href="@{/delete/{id}(id=${todo.id})}"
+                       class="btn btn-sm btn-outline-danger">
+                        Delete
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>
